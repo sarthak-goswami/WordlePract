@@ -1,0 +1,27 @@
+main{
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+.cell{
+  background: #000;
+  width: 45px;
+  height: 45px;
+  margin: 3px;
+  border : 1px solid rgb(158, 158, 158);
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  
+}
+.cell.correct { background: #6aaa64; }
+.cell.present { background: #c9b458; }
+.cell.absent  { background: #787c7e; }

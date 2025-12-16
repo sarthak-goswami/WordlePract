@@ -827,7 +827,7 @@ const App = () => {
 
 
   
-  function checkAnswer(solution, guess) {
+  function checkAnswer(solution, guess,wordCount,guesses) {
     const solArray = solution.toUpperCase().split("");
     let Result = [];
     if (guess === solArray) {
@@ -851,6 +851,13 @@ const App = () => {
     });
 
     console.log(Result);
+    setGuesses((prevGuesses)=>{
+      const newGuesses = [...prevGuesses];
+      newGuesses[wordCount]=Result;
+      console.log(newGuesses);
+      return newGuesses
+    })
+
     return Result;
   }
 
@@ -865,7 +872,7 @@ const App = () => {
       }
       if (e.key === "Enter") {
         handleEnter();
-        checkAnswer(solution, currentGuess);
+        checkAnswer(solution, currentGuess,wordCount,guesses);
       }
       if (/^[a-zA-Z]$/.test(e.key)) {
         // console.log("key inside the handler:", e.key);
@@ -896,6 +903,7 @@ const App = () => {
       // console.log("Enter is handle correctly");
       // console.log("enter wale new guesses", guesses);
       if (wordCount > 4) {
+        console.log("solution is",solution)
         return;
       }
       if (currentGuess.includes("") == 1) {
@@ -964,13 +972,17 @@ function WordLine({ word }) {
   return (
     <div className="row">
       {word.map((cell, i) => {
+        if(cell.index ) {
+          return <LetterShow key={i} letter={cell.index} status={cell.status}/>
+        }
         return <LetterShow key={i} letter={cell} />;
       })}
     </div>
   );
 }
 
-function LetterShow({ letter }) {
+function LetterShow({ letter,status }) {
+  if(status) return <div className={`cell ${status}`}>{letter}</div>;
   return <div className="cell">{letter}</div>;
 }
 

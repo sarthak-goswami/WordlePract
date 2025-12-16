@@ -1,11 +1,15 @@
 main{
+  background: linear-gradient(to bottom right,rgb(1, 1, 117),rgb(0, 0, 48));
   width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-
+.heading{
+  text-shadow: #fff 0px 0px 7px;
+}
 .row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -21,12 +25,11 @@ main{
   font-size: 2rem;
   font-weight: 600;
   border-radius: 3px;
+  box-shadow: #fff 0px 0px 2px;;
   
 }
-.correct { background: #73c56b;
-  
-}
-.present { background: #c2b162; }
+.correct { background: #73c56b;}
+.present { background: #c2b162;}
 .absent  { background: #4f4f4f;
   
  }

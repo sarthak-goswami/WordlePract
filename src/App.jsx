@@ -983,7 +983,7 @@ const App = () => {
 
   return (
     <main>
-      <h1>WORDLE</h1>
+      <h1 className="heading">WORDLE</h1>
       {guesses.map((word, index) => {
         return <WordLine key={index} word={word} />;
       })}

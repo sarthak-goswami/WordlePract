@@ -818,23 +818,25 @@ const App = () => {
   const [currentGuess, setCurrentGuess] = useState(new Array(5).fill(""));
   const [turn, setTurn] = useState(0);
   const [gameStatus, setGameStatus] = useState("playing");
+  const [display, setDisplay] = useState("");
 
   //useEffect for getting the correct word
   useEffect(() => {
-    const index = Math.floor(Math.random()*802);
+    const index = Math.floor(Math.random() * 802);
     setSolution(solutionArray[index].word);
   }, []);
 
-
-  
-  function checkAnswer(solution, guess,wordCount,guesses) {
+  function checkAnswer(solution, guess, wordCount, guesses) {
     const solArray = solution.toUpperCase().split("");
+    let rightCount = 0;
+    console.log(solution);
     let Result = [];
     if (guess === solArray) {
       let i = 0;
 
       guess.forEach((letter) => {
         Result[i] = { letter, status: "correct" };
+        alert("won the game");
       });
       return;
     }
@@ -850,13 +852,31 @@ const App = () => {
       place++;
     });
 
-    console.log(Result);
-    setGuesses((prevGuesses)=>{
+    // console.log(Result);
+    setGuesses((prevGuesses) => {
       const newGuesses = [...prevGuesses];
-      newGuesses[wordCount]=Result;
-      console.log(newGuesses);
-      return newGuesses
-    })
+      newGuesses[wordCount] = Result;
+      // console.log(newGuesses);
+      return newGuesses;
+    });
+
+    for (let i = 0; i < Result.length; i++) {
+      if (Result[i].status === "correct") {
+        rightCount++;
+      }
+    }
+    if (rightCount == 5) {
+      
+      setDisplay(`WINNER ${solution.toUpperCase()} is the answer`);
+      setGameStatus("not playing");
+    }
+    if (wordCount === 5) {
+      if (rightCount != 5) {
+        
+        setDisplay(`LOSER!! ${solution.toUpperCase()} is the answer`);
+        setGameStatus("not playing");
+      }
+    }
 
     return Result;
   }
@@ -872,7 +892,10 @@ const App = () => {
       }
       if (e.key === "Enter") {
         handleEnter();
-        checkAnswer(solution, currentGuess,wordCount,guesses);
+        checkAnswer(solution, currentGuess, wordCount, guesses);
+        if (wordCount == 6) {
+          const setDisplay = solution;
+        }
       }
       if (/^[a-zA-Z]$/.test(e.key)) {
         // console.log("key inside the handler:", e.key);
@@ -900,10 +923,10 @@ const App = () => {
     }
 
     function handleEnter() {
-      // console.log("Enter is handle correctly");
-      // console.log("enter wale new guesses", guesses);
       if (wordCount > 4) {
-        console.log("solution is",solution)
+        // console.log("solution is", solution);
+        setGameStatus("not playing");
+        setDisplay(solution);
         return;
       }
       if (currentGuess.includes("") == 1) {
@@ -964,16 +987,24 @@ const App = () => {
       {guesses.map((word, index) => {
         return <WordLine key={index} word={word} />;
       })}
+      <DisplayResult result={display} />
     </main>
   );
 };
+
+function DisplayResult({ result }) {
+  if (result === "") return;
+  return <div className="displayResult">{result.toUpperCase()}</div>;
+}
 
 function WordLine({ word }) {
   return (
     <div className="row">
       {word.map((cell, i) => {
-        if(cell.index ) {
-          return <LetterShow key={i} letter={cell.index} status={cell.status}/>
+        if (cell.index) {
+          return (
+            <LetterShow key={i} letter={cell.index} status={cell.status} />
+          );
         }
         return <LetterShow key={i} letter={cell} />;
       })}
@@ -981,8 +1012,8 @@ function WordLine({ word }) {
   );
 }
 
-function LetterShow({ letter,status }) {
-  if(status) return <div className={`cell ${status}`}>{letter}</div>;
+function LetterShow({ letter, status }) {
+  if (status) return <div className={`cell flip ${status}`}>{letter}</div>;
   return <div className="cell">{letter}</div>;
 }
 
